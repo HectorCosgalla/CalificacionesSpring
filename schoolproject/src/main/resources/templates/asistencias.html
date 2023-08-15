@@ -7,9 +7,24 @@
 </head>
 <body>
     <h1>Lista de alumnos:</h1>
-    <a th:href="@{'/alumno'}">Agrega un nuevo alumno</a>
-    <ul th:each=" alumno : ${alumnos}">
-        <li th:text="${alumno.nombres}+ ' ' + ${alumno.primerApellido}+ ' ' + ${alumno.segundoApellido}"></li>
-    </ul>
+    <a th:href="@{'/alumno'}">Agregar alumno(s)</a>
+    <table>
+        <tr>
+            <th>
+                Apellido Paterno
+            </th>
+            <th>
+                Apellido materno
+            </th>
+            <th>
+                Nombre(s)
+            </th>
+        </tr>
+        <tr th:each="alumno : ${alumnos}">
+            <td th:text="${alumno.primerApellido}">primer apellido</td>
+            <td th:text="${alumno.segundoApellido}">segundo apellido</td>
+            <td th:text="${alumno.nombres}">nombres</td>
+        </tr>
+    </table>
 </body>
 </html>
