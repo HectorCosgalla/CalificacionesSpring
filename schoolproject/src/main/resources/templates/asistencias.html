@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencias</title>
+</head>
+<body>
+    <h1>Lista de alumnos:</h1>
+    <a th:href="@{'/alumno'}">Agrega un nuevo alumno</a>
+    <ul th:each=" alumno : ${alumnos}">
+        <li th:text="${alumno.nombres}+ ' ' + ${alumno.primerApellido}+ ' ' + ${alumno.segundoApellido}"></li>
+    </ul>
+</body>
+</html>

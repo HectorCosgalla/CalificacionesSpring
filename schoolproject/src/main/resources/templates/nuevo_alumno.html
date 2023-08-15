@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Agrega a un nuevo alumno:</h2>
+    <form action="#"
+    th:action="@{/alumno}"
+    th:object="${alumno}"
+    method="post">
+    <label for="nombre_nuevo_estudiante">Nombre:</label>
+    <input type="text" id="nombre_nuevo_estudiante" th:field="*{nombres}" required><br>
+    <label for="primer_apellido_nuevo_estudiante">Apellido paterno:</label>
+    <input type="text" id="primer_apellido_nuevo_estudiante" th:field="*{primerApellido}" required><br>
+    <label for="segundo_apellido_nuevo_estudiante">Apellido materno:</label>
+    <input type="text" id="segundo_apellido_nuevo_estudiante" th:field="*{segundoApellido}" required>
+    <button type="submit">Agregalo</button>
+    </form>
+</body>
+</html>
