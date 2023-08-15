@@ -24,6 +24,10 @@ public class AlumnosServices {
         alumnosRepository.save(alumno);
     }
 
+    public void saveAllAlumnos(List<Alumno> alumnos){
+        alumnosRepository.saveAll(alumnos);
+    }
+
     public List<Alumno> getAll(){
         return alumnosRepository.findAll();
     }
