@@ -2,12 +2,14 @@ package com.valcos98.schoolproject.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -52,6 +54,39 @@ public class AlumnosController {
             listaAlumnos.add(alumno);
         }
         alumnosServices.saveAllAlumnos(listaAlumnos);
+        return "redirect:/";
+    }
+
+    @GetMapping("/alumno/{id}/delete")
+    public String eliminaAlumno(@PathVariable Long id){
+        Optional<Alumno> alumnoOptional = alumnosServices.getById(id);
+        if(alumnoOptional.isPresent()){
+            Alumno alumno = alumnoOptional.get();
+            alumnosServices.deleteAlumno(alumno);
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/alumno/{id}/edit")
+    public String obtenActualizaAlumno(@PathVariable Long id, Model model){
+        Optional<Alumno> alumnoOptional = alumnosServices.getById(id);
+        if(alumnoOptional.isPresent()){
+            Alumno alumno = alumnoOptional.get();
+            model.addAttribute("alumno", alumno);
+        }
+        return "actualiza_alumno";
+    }
+
+    @PostMapping("alumno/{id}")
+    public String actualizaAlumno(@PathVariable Long id, Alumno alumno){
+        Optional<Alumno> alumnoOptional = alumnosServices.getById(id);
+        if(alumnoOptional.isPresent()){
+            Alumno existingAlumno = alumnoOptional.get();
+            existingAlumno.setNombres(alumno.getNombres());
+            existingAlumno.setPrimerApellido(alumno.getPrimerApellido());
+            existingAlumno.setSegundoApellido(alumno.getSegundoApellido());
+            alumnosServices.saveAlumno(existingAlumno);
+        }
         return "redirect:/";
     }
 }

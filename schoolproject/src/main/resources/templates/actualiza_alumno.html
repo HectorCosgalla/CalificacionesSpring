@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editando: alumno</title>
+</head>
+<body>
+    <h2 th:text="'Editando al alumno: ' + ${alumno.nombres}">title</h2>
+    <form action="#"
+    th:action = "@{'/alumno/'+${alumno.id}}"
+    th:object = "${alumno}"
+    method="post">
+    <label for="nombre-alumno">Nombre:</label>
+    <input type="text" id="nombre-alumno" th:field="*{nombres}"></br>
+    <label for="primer-apellido-alumno">Apellido paterno:</label>
+    <input type="text" id="primer-apellido-alumno" th:field="*{primerApellido}"></br>
+    <label for="segundo-apellido-alumno">Apellido materno:</label>
+    <input type="text" id="segundo-apellido-alumno" th:field="*{segundoApellido}"></br>
+    <button type="submit">Guardalo</button>
+    </form>
+</body>
+</html>

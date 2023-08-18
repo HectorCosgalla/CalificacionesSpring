@@ -10,7 +10,7 @@ import com.valcos98.schoolproject.repositories.AlumnosRepository;
 
 @Service
 public class AlumnosServices {
-    public final AlumnosRepository alumnosRepository;
+    private final AlumnosRepository alumnosRepository;
 
     public AlumnosServices(AlumnosRepository alumnosRepository){
         this.alumnosRepository = alumnosRepository;
@@ -31,4 +31,8 @@ public class AlumnosServices {
     public List<Alumno> getAll(){
         return alumnosRepository.findAll();
     }
+
+    public void deleteAlumno(Alumno alumno){
+        alumnosRepository.delete(alumno);
+    }   
 }

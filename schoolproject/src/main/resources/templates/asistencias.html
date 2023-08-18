@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" th:src = "@{jsfiles/ButtonsActions.js}"></script>
     <title>Asistencias</title>
 </head>
 <body>
@@ -24,6 +25,8 @@
             <td th:text="${alumno.primerApellido}">primer apellido</td>
             <td th:text="${alumno.segundoApellido}">segundo apellido</td>
             <td th:text="${alumno.nombres}">nombres</td>
+            <td><a th:href="@{'/alumno/'+${alumno.id}+'/edit'}">Editar</a></td>
+            <td><a th:href="@{'/alumno/'+${alumno.id}+'/delete'}">Eliminar</a></td>
         </tr>
     </table>
 </body>
