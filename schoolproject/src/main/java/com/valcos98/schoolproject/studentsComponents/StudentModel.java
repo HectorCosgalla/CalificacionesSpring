@@ -1,4 +1,4 @@
-package com.valcos98.schoolproject.models;
+package com.valcos98.schoolproject.studentsComponents;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,28 +13,28 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "alumnos")
-public class Alumno {
+public class StudentModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "nombres", nullable = false, length = 50)
-    private String nombres;
+    private String names;
 
     @Column(name = "apellido_paterno", nullable = false, length = 25)
-    private String primerApellido;
+    private String middleName;
 
     @Column(name = "apellido_materno", nullable = false, length = 25)
-    private String segundoApellido;
+    private String lastName;
 
-    public Alumno(String nombres, String primerApellido, String segundoApellido){
-        this.nombres = nombres;
-        this.primerApellido = primerApellido;
-        this.segundoApellido = segundoApellido;
+    public StudentModel(String names, String middleName, String lastName){
+        this.names = names;
+        this.middleName = middleName;
+        this.lastName = lastName;
     }
 
-    public Alumno( ){
+    public StudentModel( ){
 
     }
 
