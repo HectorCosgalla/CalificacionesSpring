@@ -21,12 +21,12 @@
                 Nombre(s)
             </th>
         </tr>
-        <tr th:each="alumno : ${alumnos}">
-            <td th:text="${alumno.primerApellido}">primer apellido</td>
-            <td th:text="${alumno.segundoApellido}">segundo apellido</td>
-            <td th:text="${alumno.nombres}">nombres</td>
-            <td><a th:href="@{'/alumno/'+${alumno.id}+'/edit'}">Editar</a></td>
-            <td><a th:href="@{'/alumno/'+${alumno.id}+'/delete'}">Eliminar</a></td>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.middleName}">primer apellido</td>
+            <td th:text="${student.lastName}">segundo apellido</td>
+            <td th:text="${student.names}">nombres</td>
+            <td><a th:href="@{'/alumno/'+${student.id}+'/edit'}">Editar</a></td>
+            <td><a th:href="@{'/alumno/'+${student.id}+'/delete'}">Eliminar</a></td>
         </tr>
     </table>
 </body>

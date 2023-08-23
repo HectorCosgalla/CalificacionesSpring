@@ -6,17 +6,17 @@
     <title>Editando: alumno</title>
 </head>
 <body>
-    <h2 th:text="'Editando al alumno: ' + ${alumno.nombres}">title</h2>
+    <h2 th:text="'Editando al alumno: ' + ${student.names}">title</h2>
     <form action="#"
-    th:action = "@{'/alumno/'+${alumno.id}}"
-    th:object = "${alumno}"
+    th:action = "@{'/alumno/'+${student.id}}"
+    th:object = "${student}"
     method="post">
     <label for="nombre-alumno">Nombre:</label>
-    <input type="text" id="nombre-alumno" th:field="*{nombres}"></br>
+    <input type="text" id="nombre-alumno" th:field="*{names}"></br>
     <label for="primer-apellido-alumno">Apellido paterno:</label>
-    <input type="text" id="primer-apellido-alumno" th:field="*{primerApellido}"></br>
+    <input type="text" id="primer-apellido-alumno" th:field="*{middleName}"></br>
     <label for="segundo-apellido-alumno">Apellido materno:</label>
-    <input type="text" id="segundo-apellido-alumno" th:field="*{segundoApellido}"></br>
+    <input type="text" id="segundo-apellido-alumno" th:field="*{lastName}"></br>
     <button type="submit">Guardalo</button>
     </form>
 </body>

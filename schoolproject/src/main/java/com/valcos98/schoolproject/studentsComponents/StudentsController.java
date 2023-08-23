@@ -23,16 +23,16 @@ public class StudentsController {
     public String studentsAssistence(Model model){
         List<StudentModel> students = studentsServices.getAll();
         if(students.size()>0){
-            model.addAttribute("alumnos", students);
+            model.addAttribute("students", students);
         }
-        return "asistencias";
+        return "students_pages/list_students";
     }
 
     @GetMapping("/alumno")
     public String newStudent(Model model){
         StudentModel student = new StudentModel();
         model.addAttribute(student);
-        return "nuevo_alumno";
+        return "students_pages/new_student";
     }
 
     @PostMapping("/alumno")
@@ -69,9 +69,9 @@ public class StudentsController {
         Optional<StudentModel> studentOptional = studentsServices.getById(id);
         if(studentOptional.isPresent()){
             StudentModel student = studentOptional.get();
-            model.addAttribute("alumno", student);
+            model.addAttribute("student", student);
         }
-        return "actualiza_alumno";
+        return "students_pages/update_student";
     }
 
     @PostMapping("alumno/{id}")
