@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class StudentsController {
 
     @Autowired
-    private StudentsServices studentsServices;
+    private StudentsRepository studentsRepository;
 
-    @GetMapping("/")
+    @GetMapping("/lista")
     public String studentsAssistence(Model model){
-        List<StudentModel> students = studentsServices.getAll();
+        List<StudentModel> students = studentsRepository.findAll();
         if(students.size()>0){
             model.addAttribute("students", students);
         }
@@ -37,7 +37,7 @@ public class StudentsController {
 
     @PostMapping("/alumno")
     public String uploadStudent(@ModelAttribute StudentModel student){
-        studentsServices.saveStudent(student);
+        studentsRepository.save(student);
         return "redirect:/";
     }
 
@@ -50,23 +50,23 @@ public class StudentsController {
             StudentModel student = new StudentModel(studentFullName[0], studentFullName[1], studentFullName[2]);
             studentsList.add(student);
         }
-        studentsServices.saveAllStudents(studentsList);
+        studentsRepository.saveAll(studentsList);
         return "redirect:/";
     }
 
     @GetMapping("/alumno/{id}/delete")
     public String eliminaAlumno(@PathVariable Long id){
-        Optional<StudentModel> studentOptional = studentsServices.getById(id);
+        Optional<StudentModel> studentOptional = studentsRepository.findById(id);
         if(studentOptional.isPresent()){
             StudentModel student = studentOptional.get();
-            studentsServices.deleteStudent(student);
+            studentsRepository.delete(student);
         }
         return "redirect:/";
     }
 
     @GetMapping("/alumno/{id}/edit")
     public String getUpdateStudent(@PathVariable Long id, Model model){
-        Optional<StudentModel> studentOptional = studentsServices.getById(id);
+        Optional<StudentModel> studentOptional = studentsRepository.findById(id);
         if(studentOptional.isPresent()){
             StudentModel student = studentOptional.get();
             model.addAttribute("student", student);
@@ -76,13 +76,13 @@ public class StudentsController {
 
     @PostMapping("alumno/{id}")
     public String updateStudent(@PathVariable Long id, StudentModel student){
-        Optional<StudentModel> studentOptional = studentsServices.getById(id);
+        Optional<StudentModel> studentOptional = studentsRepository.findById(id);
         if(studentOptional.isPresent()){
             StudentModel existingStudent = studentOptional.get();
             existingStudent.setNames(student.getNames());
             existingStudent.setMiddleName(student.getMiddleName());
             existingStudent.setLastName(student.getLastName());
-            studentsServices.saveStudent(existingStudent);
+            studentsRepository.save(existingStudent);
         }
         return "redirect:/";
     }

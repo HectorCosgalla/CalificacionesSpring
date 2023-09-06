@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Añade un nuevo alumno:</h2>
+    <form action="#"
+    th:action="@{/grupo/nuevo}"
+    th:object="${group}"
+    method="post">
+        <label for="drop_down_grades">Selecciona el grado:</label><br>
+        <select name="grades" id="drop_down_grades" th:field="*{grade}"><br>
+            <option th:each=" grado : ${grados}" th:value="${grado.id}" th:text="${grado.name}">Grado</option>
+        </select><br>
+        <label for="group_letter">Ingresa la letra del grupo:</label><br>
+        <input type="text" name="group_letter_input" id="group_letter" th:field="*{letter}"><br>
+        <button type="submit">Subelo</button>
+    </form>
+</body>
+</html>
