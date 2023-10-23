@@ -2,15 +2,17 @@ package com.valcos98.schoolproject.gradesComponents;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GradesInitializer implements CommandLineRunner{
 
-    @Autowired
     private GradeRepository gradeRepository;
+
+    public GradesInitializer(GradeRepository gradeRepository){
+        this.gradeRepository = gradeRepository;
+    }
 
     @Override
     public void run(String... args){
