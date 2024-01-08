@@ -3,7 +3,7 @@ package com.valcos98.schoolproject.groupsComponents;
 
 import java.util.Set;
 
-import com.valcos98.schoolproject.gradesComponents.GradeModel;
+import com.valcos98.schoolproject.semesterComponents.SemesterModel;
 import com.valcos98.schoolproject.studentsComponents.StudentModel;
 
 import jakarta.persistence.Column;
@@ -33,7 +33,7 @@ public class GroupModel {
 
     @ManyToOne
     @JoinColumn(name = "grados_id", nullable = false)
-    private GradeModel grade;
+    private SemesterModel grade;
 
     @OneToMany(mappedBy = "group")
     private Set<StudentModel> students;

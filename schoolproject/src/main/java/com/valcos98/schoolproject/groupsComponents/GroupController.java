@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.valcos98.schoolproject.gradesComponents.GradeModel;
-import com.valcos98.schoolproject.gradesComponents.GradeRepository;
+import com.valcos98.schoolproject.semesterComponents.SemesterModel;
+import com.valcos98.schoolproject.semesterComponents.SemesterRepository;
 
 @Controller
 @RequestMapping("/grupo")
 public class GroupController {
 
     private GroupRepository groupRepository;
-    private GradeRepository gradeRepository;
+    private SemesterRepository gradeRepository;
 
-    public GroupController(GroupRepository groupRepository, GradeRepository gradeRepository){
+    public GroupController(GroupRepository groupRepository, SemesterRepository gradeRepository){
         this.groupRepository = groupRepository;
         this.gradeRepository = gradeRepository;
     }
 
     @GetMapping("/nuevo")
     public String createANewGroup(Model model){
-        List<GradeModel> grades = gradeRepository.findAll();
+        List<SemesterModel> grades = gradeRepository.findAll();
         GroupModel group = new GroupModel();
         model.addAttribute("grados", grades);
         model.addAttribute("group", group);

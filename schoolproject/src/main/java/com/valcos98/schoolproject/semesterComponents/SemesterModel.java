@@ -1,4 +1,4 @@
-package com.valcos98.schoolproject.gradesComponents;
+package com.valcos98.schoolproject.semesterComponents;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "grado")
-public class GradeModel {
+public class SemesterModel {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,8 @@ public class GradeModel {
     @OneToMany(mappedBy = "grade")
     private Set<GroupModel> groups;
 
-    public GradeModel(String name){
+    public SemesterModel(String name){
         this.name = name;
     }
-    public GradeModel(){}
+    public SemesterModel(){}
 }
