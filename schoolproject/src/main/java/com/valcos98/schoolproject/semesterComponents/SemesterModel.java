@@ -17,7 +17,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "grado")
+@Table(name = "semestre")
 public class SemesterModel {
     
     @Id
@@ -27,7 +27,7 @@ public class SemesterModel {
     @Column(name = "nombre", nullable = false, length = 7)
     private String name;
 
-    @OneToMany(mappedBy = "grade")
+    @OneToMany(mappedBy = "semester")
     private Set<GroupModel> groups;
 
     public SemesterModel(String name){

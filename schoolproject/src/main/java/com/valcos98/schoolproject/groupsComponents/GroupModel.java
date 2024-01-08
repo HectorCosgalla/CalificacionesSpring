@@ -3,6 +3,7 @@ package com.valcos98.schoolproject.groupsComponents;
 
 import java.util.Set;
 
+import com.valcos98.schoolproject.courseComponents.courseModel;
 import com.valcos98.schoolproject.semesterComponents.SemesterModel;
 import com.valcos98.schoolproject.studentsComponents.StudentModel;
 
@@ -12,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,11 +34,14 @@ public class GroupModel {
     private String letter;
 
     @ManyToOne
-    @JoinColumn(name = "grados_id", nullable = false)
-    private SemesterModel grade;
+    @JoinColumn(name = "semestre_id", nullable = false)
+    private SemesterModel semester;
 
     @OneToMany(mappedBy = "group")
     private Set<StudentModel> students;
+
+    @ManyToMany
+    private Set<courseModel> courses;
 
     public GroupModel(String letter){
         this.letter = letter;
