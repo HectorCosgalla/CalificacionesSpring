@@ -2,7 +2,7 @@ package com.valcos98.schoolproject.semesterComponents;
 
 import java.util.Set;
 
-import com.valcos98.schoolproject.groupsComponents.GroupModel;
+import com.valcos98.schoolproject.courseComponents.CourseModel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,18 +17,18 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "semestre")
+@Table(name = "semestres")
 public class SemesterModel {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 7)
+    @Column(name = "semestre", nullable = false, length = 7)
     private String name;
 
-    @OneToMany(mappedBy = "semester")
-    private Set<GroupModel> groups;
+    @OneToMany(mappedBy = "courseSemester")
+    private Set<CourseModel> courses;
 
     public SemesterModel(String name){
         this.name = name;
