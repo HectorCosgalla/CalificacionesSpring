@@ -20,50 +20,50 @@ public class FirstConfiguration implements CommandLineRunner {
         this.semesterRepository = semesterRepository;
         this.courseRepository = courseRepository;
     }
+
     @Override
     public void run(String... args) throws Exception {
         List<SemesterModel> semesters = semesterRepository.findAll();
         List<CourseModel> courses = courseRepository.findAll();
 
         if (semesters.size() == 0) {
-            SemesterModel firstSemester = new SemesterModel("Primero");
-            SemesterModel secondSemester = new SemesterModel("Segundo");
-            SemesterModel thirdSemester = new SemesterModel("Tercero");
-            SemesterModel fourthSemester = new SemesterModel("Cuarto");
-            SemesterModel fifthSemester = new SemesterModel("Quinto");
-            SemesterModel sixthSemester = new SemesterModel("Sexto");
-            
-            semesters.add(firstSemester);
-            semesters.add(secondSemester);
-            semesters.add(thirdSemester);
-            semesters.add(fourthSemester);
-            semesters.add(fifthSemester);
-            semesters.add(sixthSemester);
-
-            semesterRepository.saveAll(semesters);
-
-            CourseModel englishOne = new CourseModel("ingles 1");
-            CourseModel englishTwo = new CourseModel("ingles 2");
-            CourseModel englishThree = new CourseModel("ingles 3");
-            CourseModel englishFour = new CourseModel("ingles 4");
-            CourseModel englishFive = new CourseModel("ingles 5");
-            CourseModel Humanitiesthree = new CourseModel("Humanidades 3");
-
-            englishOne.setCourseSemester(firstSemester);
-            englishTwo.setCourseSemester(secondSemester);
-            englishThree.setCourseSemester(thirdSemester);
-            englishFour.setCourseSemester(fourthSemester);
-            englishFive.setCourseSemester(fifthSemester);
-            Humanitiesthree.setCourseSemester(sixthSemester);
-
-            courses.add(englishOne);
-            courses.add(englishTwo);
-            courses.add(englishThree);
-            courses.add(englishFour);
-            courses.add(englishFive);
-            courses.add(Humanitiesthree);
-
+            courses = addSemesterAndCourses(semesters, courses);
             courseRepository.saveAll(courses);
         }
+    }
+
+    private List<CourseModel> addSemesterAndCourses(List<SemesterModel> semesters, List<CourseModel> courses){
+            
+        String[] arraySemesters= {
+                "Primero",
+                "Segundo",
+                "Tercero",
+                "Cuarto",
+                "Quinto",
+                "Sexto"
+            };
+        semesterRepository.saveAll(semesters);
+
+        String[][] coursesBySemester = CsvProcessor.csvToStringForCourses(
+        "C:/Users/Hector Cosgalla/Documents/GitHub/CalificacionesSpring/resources/malla_curricular.csv");
+
+        for (int i = 0; i < coursesBySemester[0].length; i++) {
+            SemesterModel semester = new SemesterModel(arraySemesters[i]);
+            semesters.add(semester);
+            for (int j = 0; j < coursesBySemester.length; j++) {
+                courses = addACourse(coursesBySemester[j][i], courses, semester);          
+            }
+        semesterRepository.saveAll(semesters);
+        }
+        return courses;
+    }
+
+    private List<CourseModel> addACourse(String Course, List<CourseModel> courses, SemesterModel semester){
+        if (!Course.isEmpty()) {
+            CourseModel course = new CourseModel(Course);
+            course.setCourseSemester(semester);
+            courses.add(course);
+        }
+        return courses; 
     }
 }
