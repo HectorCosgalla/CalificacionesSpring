@@ -1,7 +1,10 @@
 package com.valcos98.schoolproject.semesterComponents;
 
-import java.util.Set;
+import java.util.List;
 
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.valcos98.schoolproject.courseComponents.CourseModel;
 
 import jakarta.persistence.Column;
@@ -14,6 +17,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Getter
 @Setter
@@ -28,7 +32,7 @@ public class SemesterModel {
     private String name;
 
     @OneToMany(mappedBy = "courseSemester")
-    private Set<CourseModel> courses;
+    private List<CourseModel> courses;
 
     public SemesterModel(String name){
         this.name = name;

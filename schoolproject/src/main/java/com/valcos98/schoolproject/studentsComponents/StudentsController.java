@@ -45,7 +45,7 @@ public class StudentsController {
         return "redirect:/";
     }
 
-    @PostMapping("/alumnos")
+    @PostMapping("/alumnozz")
     public String uploadStudents(@RequestParam String students){
         List<StudentModel> studentsList = new ArrayList<>();
         String[] arrayStudents = students.split("\n");

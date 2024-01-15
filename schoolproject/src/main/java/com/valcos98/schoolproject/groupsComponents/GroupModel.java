@@ -1,8 +1,9 @@
 package com.valcos98.schoolproject.groupsComponents;
 
+import java.util.List;
 
-import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.valcos98.schoolproject.courseComponents.CourseModel;
 import com.valcos98.schoolproject.studentsComponents.StudentModel;
 
@@ -17,6 +18,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Getter
 @Setter
@@ -31,10 +33,10 @@ public class GroupModel {
     private String letter;
 
     @OneToMany(mappedBy = "group")
-    private Set<StudentModel> students;
+    private List<StudentModel> students;
 
     @ManyToMany(mappedBy = "groups")
-    private Set<CourseModel> courses;
+    private List<CourseModel> courses;
 
     public GroupModel(String letter){
         this.letter = letter;

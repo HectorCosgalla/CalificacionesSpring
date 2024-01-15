@@ -1,7 +1,9 @@
 package com.valcos98.schoolproject.courseComponents;
 
-import java.util.Set;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.valcos98.schoolproject.groupsComponents.GroupModel;
 import com.valcos98.schoolproject.semesterComponents.SemesterModel;
 
@@ -18,6 +20,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Getter
 @Setter
@@ -36,7 +39,7 @@ public class CourseModel {
         joinColumns = @JoinColumn(name = "materias_id"),
         inverseJoinColumns = @JoinColumn(name = "grupos_id")
     )
-    private Set<GroupModel> groups;
+    private List<GroupModel> groups;
 
     @ManyToOne
     @JoinColumn(name = "semestre_id", nullable = false)
