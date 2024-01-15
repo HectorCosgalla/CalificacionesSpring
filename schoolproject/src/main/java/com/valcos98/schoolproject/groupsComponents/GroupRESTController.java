@@ -48,7 +48,7 @@ public class GroupRESTController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/nuevo")
+    @PostMapping()
     private ResponseEntity<Void> createANewGroup(
         @RequestParam(value = "courseId", required = true) Long courseId, 
         @RequestBody GroupModel group,
