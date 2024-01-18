@@ -36,10 +36,17 @@ public class StudentModel {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "grupos_id", nullable = false)
+    @JoinColumn(name = "grupos_id")
     private GroupModel group;
 
     public StudentModel(String names, String middleName, String lastName){
+        this.names = names;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
+
+    public StudentModel(Long id, String names, String middleName, String lastName){
+        this.id = id;
         this.names = names;
         this.middleName = middleName;
         this.lastName = lastName;

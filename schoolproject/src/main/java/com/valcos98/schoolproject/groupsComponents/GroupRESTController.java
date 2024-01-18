@@ -1,6 +1,7 @@
 package com.valcos98.schoolproject.groupsComponents;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,28 +50,26 @@ public class GroupRESTController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping()
+    @PostMapping
     private ResponseEntity<Void> createANewGroup(
-        @RequestParam(value = "courseId", required = true) Long courseId, 
+        @RequestParam(value = "courseId", required = true) String coursesIds, 
         @RequestBody GroupModel group,
         UriComponentsBuilder ucb
     ){
-        GroupModel newGroup = new GroupModel(group.getLetter());
-        Optional<CourseModel> course = courseRepository.findById(courseId);
-        if (course.isPresent()) {
-            GroupModel savedGroup = groupRepository.save(newGroup);
-            course.get().getGroups().add(savedGroup);
-            courseRepository.save(course.get());
-            URI locationOfNewGroup = ucb
-                    .path("/grupos/{id}")
-                    .buildAndExpand(savedGroup.getId())
-                    .toUri();
-
-            return ResponseEntity.created(locationOfNewGroup).build();
-        } else {
-            return ResponseEntity.notFound().build();
+        String[] listOfCoursesIds = coursesIds.split(" ");
+        List<CourseModel> listOfCourses = new ArrayList<>();
+        for (String courseId : listOfCoursesIds) {
+            Optional<CourseModel> course = courseRepository.findById(Long.parseLong(courseId));
+            listOfCourses.add(course.get());
         }
-
+        GroupModel newGroup = new GroupModel(group.getLetter());
+        newGroup.setCourses(listOfCourses);
+        GroupModel savedGroup = groupRepository.save(newGroup);
+        URI locationOfNewGroup = ucb
+            .path("/grupos/{id}")
+            .buildAndExpand(savedGroup.getId())
+            .toUri();
+            return ResponseEntity.created(locationOfNewGroup).build();
     }
 
     @GetMapping
@@ -83,5 +83,23 @@ public class GroupRESTController {
         );
 
         return ResponseEntity.ok(page.getContent());
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<Void> deleteAGroup(@PathVariable Long id){
+        if (groupRepository.existsById(id)) {
+            Optional<GroupModel> group = groupRepository.findById(id);
+            /**for (CourseModel courses : group.get().getCourses()) {
+                Optional<CourseModel> course = courseRepository.findById(courses.getId());
+                List<GroupModel> groups = course.get().getGroups();
+                groups.remove(group.get());
+                courseRepository.save(course.get());
+            }**/
+            group.get().setCourses(null);
+            groupRepository.save(group.get());
+            groupRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

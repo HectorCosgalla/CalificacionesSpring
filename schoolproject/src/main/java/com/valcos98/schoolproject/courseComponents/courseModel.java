@@ -33,12 +33,7 @@ public class CourseModel {
     @Column(name = "materia", nullable = false)
     private String courseName;
 
-    @ManyToMany
-    @JoinTable(
-        name = "materias_grupo",
-        joinColumns = @JoinColumn(name = "materias_id"),
-        inverseJoinColumns = @JoinColumn(name = "grupos_id")
-    )
+    @ManyToMany(mappedBy = "courses")
     private List<GroupModel> groups;
 
     @ManyToOne

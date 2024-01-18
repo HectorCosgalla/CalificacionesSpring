@@ -17,10 +17,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -39,7 +42,6 @@ public class StudentsRESTController {
     @GetMapping("/{id}")
     private ResponseEntity<StudentModel> findById(@PathVariable Long id) {
         Optional<StudentModel> student = studentsRepository.findById(id);
-
         if (student.isPresent()) {
             return ResponseEntity.ok(student.get());
         } else {
@@ -84,5 +86,27 @@ public class StudentsRESTController {
         return ResponseEntity.ok(page.getContent());
     }
     
-    
+    @PutMapping("/{requestedId}")
+    private ResponseEntity<Void> putStudent(
+        @PathVariable Long requestedId, 
+        @RequestBody StudentModel studentUpdate) {
+        Optional<StudentModel> student = studentsRepository.findById(requestedId);
+        if (student.isPresent()) {
+            student.get().setNames(studentUpdate.getNames());
+            student.get().setMiddleName(studentUpdate.getMiddleName());
+            student.get().setLastName(studentUpdate.getLastName());
+            studentsRepository.save(student.get());
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{requestedId}")
+    private ResponseEntity<Void> deleteStudent(@PathVariable Long requestedId){
+        if (studentsRepository.existsById(requestedId)) {
+            studentsRepository.deleteById(requestedId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
