@@ -10,7 +10,6 @@ import com.valcos98.schoolproject.groupsComponents.GroupRepository;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,9 +40,9 @@ public class StudentsRESTController {
 
     @GetMapping("/{id}")
     private ResponseEntity<StudentModel> findById(@PathVariable Long id) {
-        Optional<StudentModel> student = studentsRepository.findById(id);
-        if (student.isPresent()) {
-            return ResponseEntity.ok(student.get());
+        StudentModel student = getStudentbyId(id);
+        if (!student.equals(null)) {
+            return ResponseEntity.ok(student);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -55,13 +54,12 @@ public class StudentsRESTController {
         @RequestBody StudentModel student, 
         UriComponentsBuilder ucb
     ) {
-        StudentModel newStudent = new StudentModel(student.getNames(), student.getMiddleName(), student.getLastName());
-        Optional<GroupModel> group = groupRepository.findById(groupId);
-        if (group.isPresent()) {
-            newStudent.setGroup(group.get());
-            StudentModel savedStudent = studentsRepository.save(newStudent);
-            group.get().getStudents().add(savedStudent);
-            groupRepository.save(group.get());
+        GroupModel group = getGroupById(groupId);
+        if (!group.equals(null)) {
+            student.setGroup(group);
+            StudentModel savedStudent = studentsRepository.save(student);
+            group.getStudents().add(savedStudent);
+            groupRepository.save(group);
             URI locationOfNewStudent = ucb
                     .path("/alumnos/{id}")
                     .buildAndExpand(savedStudent.getId())
@@ -90,12 +88,12 @@ public class StudentsRESTController {
     private ResponseEntity<Void> putStudent(
         @PathVariable Long requestedId, 
         @RequestBody StudentModel studentUpdate) {
-        Optional<StudentModel> student = studentsRepository.findById(requestedId);
-        if (student.isPresent()) {
-            student.get().setNames(studentUpdate.getNames());
-            student.get().setMiddleName(studentUpdate.getMiddleName());
-            student.get().setLastName(studentUpdate.getLastName());
-            studentsRepository.save(student.get());
+        StudentModel student = getStudentbyId(requestedId);
+        if (!student.equals(null)) {
+            student.setNames(studentUpdate.getNames());
+            student.setMiddleName(studentUpdate.getMiddleName());
+            student.setLastName(studentUpdate.getLastName());
+            studentsRepository.save(student);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
@@ -103,10 +101,23 @@ public class StudentsRESTController {
 
     @DeleteMapping("/{requestedId}")
     private ResponseEntity<Void> deleteStudent(@PathVariable Long requestedId){
-        if (studentsRepository.existsById(requestedId)) {
+        if (requestedId != null && studentsRepository.existsById(requestedId)) {
             studentsRepository.deleteById(requestedId);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private StudentModel getStudentbyId(Long id){
+        if (id != null) {
+            return studentsRepository.findById(id).get();
+        }
+        return null;
+    }
+
+    private GroupModel getGroupById(Long id){
+        if(id != null)
+            return groupRepository.findById(id).get();
+        return null;
     }
 }

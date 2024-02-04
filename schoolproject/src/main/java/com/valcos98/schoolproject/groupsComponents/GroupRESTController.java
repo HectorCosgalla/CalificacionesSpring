@@ -89,12 +89,6 @@ public class GroupRESTController {
     private ResponseEntity<Void> deleteAGroup(@PathVariable Long id){
         if (groupRepository.existsById(id)) {
             Optional<GroupModel> group = groupRepository.findById(id);
-            /**for (CourseModel courses : group.get().getCourses()) {
-                Optional<CourseModel> course = courseRepository.findById(courses.getId());
-                List<GroupModel> groups = course.get().getGroups();
-                groups.remove(group.get());
-                courseRepository.save(course.get());
-            }**/
             group.get().setCourses(null);
             groupRepository.save(group.get());
             groupRepository.deleteById(id);
