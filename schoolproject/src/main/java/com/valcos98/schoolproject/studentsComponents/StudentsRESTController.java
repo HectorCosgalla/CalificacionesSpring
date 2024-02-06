@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.valcos98.schoolproject.generalComponents.PublicUtilities;
 import com.valcos98.schoolproject.groupsComponents.GroupModel;
 import com.valcos98.schoolproject.groupsComponents.GroupRepository;
 
@@ -40,7 +41,7 @@ public class StudentsRESTController {
 
     @GetMapping("/{id}")
     private ResponseEntity<StudentModel> findById(@PathVariable Long id) {
-        StudentModel student = getStudentbyId(id);
+        StudentModel student = PublicUtilities.getModelObjectById(id,studentsRepository);
         if (!student.equals(null)) {
             return ResponseEntity.ok(student);
         } else {
@@ -54,7 +55,7 @@ public class StudentsRESTController {
         @RequestBody StudentModel student, 
         UriComponentsBuilder ucb
     ) {
-        GroupModel group = getGroupById(groupId);
+        GroupModel group = PublicUtilities.getModelObjectById(groupId, groupRepository);
         if (!group.equals(null)) {
             student.setGroup(group);
             StudentModel savedStudent = studentsRepository.save(student);
@@ -88,7 +89,7 @@ public class StudentsRESTController {
     private ResponseEntity<Void> putStudent(
         @PathVariable Long requestedId, 
         @RequestBody StudentModel studentUpdate) {
-        StudentModel student = getStudentbyId(requestedId);
+        StudentModel student = PublicUtilities.getModelObjectById(requestedId, studentsRepository);
         if (!student.equals(null)) {
             student.setNames(studentUpdate.getNames());
             student.setMiddleName(studentUpdate.getMiddleName());
@@ -106,18 +107,5 @@ public class StudentsRESTController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    private StudentModel getStudentbyId(Long id){
-        if (id != null) {
-            return studentsRepository.findById(id).get();
-        }
-        return null;
-    }
-
-    private GroupModel getGroupById(Long id){
-        if(id != null)
-            return groupRepository.findById(id).get();
-        return null;
     }
 }

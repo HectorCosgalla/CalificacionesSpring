@@ -24,9 +24,10 @@ public class FirstConfiguration implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<SemesterModel> semesters = semesterRepository.findAll();
-        List<CourseModel> courses = courseRepository.findAll();
+        
 
         if (semesters.size() == 0) {
+            List<CourseModel> courses = courseRepository.findAll();
             courses = addSemesterAndCourses(semesters, courses);
             courseRepository.saveAll(courses);
         }
@@ -42,7 +43,6 @@ public class FirstConfiguration implements CommandLineRunner {
                 "Quinto",
                 "Sexto"
             };
-        semesterRepository.saveAll(semesters);
 
         String[][] coursesBySemester = CsvProcessor.csvToStringForCourses(
         "C:/Users/Hector Cosgalla/Documents/GitHub/CalificacionesSpring/resources/malla_curricular.csv");

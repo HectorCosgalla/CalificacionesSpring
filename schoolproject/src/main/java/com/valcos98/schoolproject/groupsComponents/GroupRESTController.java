@@ -3,7 +3,6 @@ package com.valcos98.schoolproject.groupsComponents;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.valcos98.schoolproject.courseComponents.CourseModel;
 import com.valcos98.schoolproject.courseComponents.CourseRepository;
+import com.valcos98.schoolproject.generalComponents.PublicUtilities;
 import com.valcos98.schoolproject.semesterComponents.SemesterRepository;
 
 @RestController
@@ -39,13 +39,9 @@ public class GroupRESTController {
 
     @GetMapping("/{id}")
     private ResponseEntity<GroupModel> findById(@PathVariable Long id){
-        Optional<GroupModel> group = groupRepository.findById(id);
-        
-        for (CourseModel course : group.get().getCourses()) {
-            System.out.println(course.getCourseName());
-        }
-        if (group.isPresent()) {
-            return ResponseEntity.ok(group.get());
+        GroupModel group = PublicUtilities.getModelObjectById(id, groupRepository);
+        if (!group.equals(null)) {
+            return ResponseEntity.ok(group);
         }
         return ResponseEntity.notFound().build();
     }
@@ -59,8 +55,8 @@ public class GroupRESTController {
         String[] listOfCoursesIds = coursesIds.split(" ");
         List<CourseModel> listOfCourses = new ArrayList<>();
         for (String courseId : listOfCoursesIds) {
-            Optional<CourseModel> course = courseRepository.findById(Long.parseLong(courseId));
-            listOfCourses.add(course.get());
+            CourseModel course = PublicUtilities.getModelObjectById(Long.parseLong(courseId), courseRepository);
+            listOfCourses.add(course);
         }
         GroupModel newGroup = new GroupModel(group.getLetter());
         newGroup.setCourses(listOfCourses);
@@ -87,10 +83,10 @@ public class GroupRESTController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity<Void> deleteAGroup(@PathVariable Long id){
-        if (groupRepository.existsById(id)) {
-            Optional<GroupModel> group = groupRepository.findById(id);
-            group.get().setCourses(null);
-            groupRepository.save(group.get());
+        if (id != null) {
+            GroupModel group = PublicUtilities.getModelObjectById(id, groupRepository);
+            group.setCourses(null);
+            groupRepository.save(group);
             groupRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         }
