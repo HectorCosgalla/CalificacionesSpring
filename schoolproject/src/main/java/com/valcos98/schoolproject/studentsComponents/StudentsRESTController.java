@@ -56,7 +56,7 @@ public class StudentsRESTController {
         UriComponentsBuilder ucb
     ) {
         GroupModel group = PublicUtilities.getModelObjectById(groupId, groupRepository);
-        if (!group.equals(null)) {
+        if (group != null) {
             student.setGroup(group);
             StudentModel savedStudent = studentsRepository.save(student);
             group.getStudents().add(savedStudent);
@@ -91,9 +91,15 @@ public class StudentsRESTController {
         @RequestBody StudentModel studentUpdate) {
         StudentModel student = PublicUtilities.getModelObjectById(requestedId, studentsRepository);
         if (!student.equals(null)) {
-            student.setNames(studentUpdate.getNames());
-            student.setMiddleName(studentUpdate.getMiddleName());
-            student.setLastName(studentUpdate.getLastName());
+            if (studentUpdate.getNames() != null) {
+                student.setNames(studentUpdate.getNames());
+            }
+            if (studentUpdate.getMiddleName() != null) {
+                student.setMiddleName(studentUpdate.getMiddleName());
+            }
+            if (studentUpdate.getLastName() != null) {
+                student.setLastName(studentUpdate.getLastName());
+            }
             studentsRepository.save(student);
             return ResponseEntity.noContent().build();
         }

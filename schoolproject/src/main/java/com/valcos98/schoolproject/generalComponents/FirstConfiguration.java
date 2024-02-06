@@ -26,15 +26,13 @@ public class FirstConfiguration implements CommandLineRunner {
         List<SemesterModel> semesters = semesterRepository.findAll();
         
 
-        if (semesters.size() == 0) {
-            List<CourseModel> courses = courseRepository.findAll();
-            courses = addSemesterAndCourses(semesters, courses);
-            courseRepository.saveAll(courses);
-        }
+        if (semesters.size() == 0)
+            addSemesterAndCourses(semesters);
     }
 
-    private List<CourseModel> addSemesterAndCourses(List<SemesterModel> semesters, List<CourseModel> courses){
-            
+    private void addSemesterAndCourses(List<SemesterModel> semesters){
+        List<CourseModel> courses = courseRepository.findAll();
+
         String[] arraySemesters= {
                 "Primero",
                 "Segundo",
@@ -44,7 +42,7 @@ public class FirstConfiguration implements CommandLineRunner {
                 "Sexto"
             };
 
-        String[][] coursesBySemester = CsvProcessor.csvToStringForCourses(
+        String[][] coursesBySemester = CsvUtilities.csvToStringForCourses(
         "C:/Users/Hector Cosgalla/Documents/GitHub/CalificacionesSpring/resources/malla_curricular.csv");
 
         for (int i = 0; i < coursesBySemester[0].length; i++) {
@@ -55,7 +53,8 @@ public class FirstConfiguration implements CommandLineRunner {
             }
         semesterRepository.saveAll(semesters);
         }
-        return courses;
+        if(!courses.equals(null))
+            courseRepository.saveAll(courses);
     }
 
     private List<CourseModel> addACourse(String Course, List<CourseModel> courses, SemesterModel semester){

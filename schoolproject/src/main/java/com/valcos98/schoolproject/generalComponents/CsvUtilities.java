@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import com.opencsv.CSVReader;
 
-public class CsvProcessor {
+public class CsvUtilities {
 
     public static String[][] csvToStringForCourses(String FilePath){
         
