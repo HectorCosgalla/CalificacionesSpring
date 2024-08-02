@@ -35,6 +35,9 @@ public class GroupModel {
 
     @Column(name = "letra", nullable = false, length = 1)
     private String letter;
+    
+    @Column(name = "carrera")
+    private String career;
 
     @OneToMany
     @JoinColumn(name = "grupos_id")

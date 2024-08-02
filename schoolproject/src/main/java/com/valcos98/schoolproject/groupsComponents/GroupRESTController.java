@@ -63,15 +63,17 @@ public class GroupRESTController {
     @PostMapping(value = "",consumes = {"multipart/form-data"})
     private ResponseEntity<Void> createANewGroup(
         @RequestPart("file") MultipartFile csvStudents,
-        @RequestParam(value = "semester", required = true) String semester, 
-        @RequestPart("letter") String group,
+        @RequestParam(value = "semester") String semester, 
+        @RequestPart("letter") String letter,
+        @RequestPart("career") String career,
         UriComponentsBuilder ucb
     ) throws CsvValidationException, IOException{
         SemesterModel semesterModel = semesterRepository.findByName(semester);
         List<CourseModel> listOfCourses = courseRepository.findBySemester(semesterModel.getId());
         List<StudentModel> listOfStudents = studentsRepository.saveAll(CsvUtilities.csvToStudentsList(csvStudents));
-        GroupModel newGroup = new GroupModel(group);
+        GroupModel newGroup = new GroupModel(letter);
 
+        newGroup.setCareer(career);
         newGroup.setCourses(listOfCourses);
         newGroup.setStudents(listOfStudents);
         GroupModel savedGroup = groupRepository.save(newGroup);
