@@ -2,7 +2,6 @@ package com.valcos98.schoolproject.groupsComponents;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -54,10 +53,11 @@ public class GroupRESTController {
     @GetMapping("/{id}")
     private ResponseEntity<GroupModel> findById(@PathVariable Long id){
         GroupModel group = PublicUtilities.getModelObjectById(id, groupRepository);
-        if (!group.equals(null)) {
+        if (group != null) {
             return ResponseEntity.ok(group);
+        } else{
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "",consumes = {"multipart/form-data"})
@@ -67,7 +67,6 @@ public class GroupRESTController {
         @RequestPart("letter") String group,
         UriComponentsBuilder ucb
     ) throws CsvValidationException, IOException{
-
         SemesterModel semesterModel = semesterRepository.findByName(semester);
         List<CourseModel> listOfCourses = courseRepository.findBySemester(semesterModel.getId());
         List<StudentModel> listOfStudents = studentsRepository.saveAll(CsvUtilities.csvToStudentsList(csvStudents));
@@ -75,8 +74,9 @@ public class GroupRESTController {
 
         newGroup.setCourses(listOfCourses);
         newGroup.setStudents(listOfStudents);
-        newGroup.setSemester(semesterModel);
         GroupModel savedGroup = groupRepository.save(newGroup);
+        semesterModel.getGroups().add(savedGroup);
+        semesterRepository.save(semesterModel);
 
         URI locationOfNewGroup = ucb
             .path("/grupos/{id}")

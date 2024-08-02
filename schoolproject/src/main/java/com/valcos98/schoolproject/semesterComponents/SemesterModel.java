@@ -38,7 +38,7 @@ public class SemesterModel {
 
     @OneToMany
     @JoinColumn(name = "semester_id")
-    private List <GroupModel> groups;
+    private List<GroupModel> groups;
 
     public SemesterModel(String name){
         this.name = name;
