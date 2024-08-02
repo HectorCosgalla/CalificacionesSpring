@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.valcos98.schoolproject.courseComponents.CourseModel;
+import com.valcos98.schoolproject.semesterComponents.SemesterModel;
 import com.valcos98.schoolproject.studentsComponents.StudentModel;
 
 import jakarta.persistence.Column;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -45,6 +47,10 @@ public class GroupModel {
         inverseJoinColumns = @JoinColumn(name = "materias_id")
     )
     private List<CourseModel> courses;
+
+    @ManyToOne
+    @JoinColumn(name = "semester_id", insertable = false, updatable = false)
+    private SemesterModel semester;
 
     public GroupModel(String letter){
         this.letter = letter;

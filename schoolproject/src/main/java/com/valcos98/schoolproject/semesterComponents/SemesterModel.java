@@ -6,12 +6,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.valcos98.schoolproject.courseComponents.CourseModel;
+import com.valcos98.schoolproject.groupsComponents.GroupModel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -33,6 +35,10 @@ public class SemesterModel {
 
     @OneToMany(mappedBy = "courseSemester")
     private List<CourseModel> courses;
+
+    @OneToMany
+    @JoinColumn(name = "semester_id")
+    private List <GroupModel> groups;
 
     public SemesterModel(String name){
         this.name = name;

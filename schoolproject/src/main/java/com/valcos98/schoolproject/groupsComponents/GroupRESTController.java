@@ -26,6 +26,7 @@ import com.valcos98.schoolproject.courseComponents.CourseModel;
 import com.valcos98.schoolproject.courseComponents.CourseRepository;
 import com.valcos98.schoolproject.generalComponents.CsvUtilities;
 import com.valcos98.schoolproject.generalComponents.PublicUtilities;
+import com.valcos98.schoolproject.semesterComponents.SemesterModel;
 import com.valcos98.schoolproject.semesterComponents.SemesterRepository;
 import com.valcos98.schoolproject.studentsComponents.StudentModel;
 import com.valcos98.schoolproject.studentsComponents.StudentsRepository;
@@ -62,21 +63,21 @@ public class GroupRESTController {
     @PostMapping(value = "",consumes = {"multipart/form-data"})
     private ResponseEntity<Void> createANewGroup(
         @RequestPart("file") MultipartFile csvStudents,
-        @RequestParam(value = "courseId", required = true) String coursesIds, 
+        @RequestParam(value = "semester", required = true) String semester, 
         @RequestPart("letter") String group,
         UriComponentsBuilder ucb
     ) throws CsvValidationException, IOException{
-        String[] listOfCoursesIds = coursesIds.split(" ");
-        List<CourseModel> listOfCourses = new ArrayList<>();
+
+        SemesterModel semesterModel = semesterRepository.findByName(semester);
+        List<CourseModel> listOfCourses = courseRepository.findBySemester(semesterModel.getId());
         List<StudentModel> listOfStudents = studentsRepository.saveAll(CsvUtilities.csvToStudentsList(csvStudents));
-        for (String courseId : listOfCoursesIds) {
-            CourseModel course = PublicUtilities.getModelObjectById(Long.parseLong(courseId), courseRepository);
-            listOfCourses.add(course);
-        }
         GroupModel newGroup = new GroupModel(group);
+
         newGroup.setCourses(listOfCourses);
         newGroup.setStudents(listOfStudents);
+        newGroup.setSemester(semesterModel);
         GroupModel savedGroup = groupRepository.save(newGroup);
+
         URI locationOfNewGroup = ucb
             .path("/grupos/{id}")
             .buildAndExpand(savedGroup.getId())
