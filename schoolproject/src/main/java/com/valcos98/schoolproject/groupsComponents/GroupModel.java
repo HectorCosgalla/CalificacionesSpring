@@ -34,7 +34,8 @@ public class GroupModel {
     @Column(name = "letra", nullable = false, length = 1)
     private String letter;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany
+    @JoinColumn(name = "grupos_id")
     private List<StudentModel> students;
 
     @ManyToMany

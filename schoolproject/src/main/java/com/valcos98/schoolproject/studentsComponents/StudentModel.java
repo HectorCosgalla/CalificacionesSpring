@@ -36,7 +36,7 @@ public class StudentModel {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "grupos_id")
+    @JoinColumn(name = "grupos_id",insertable = false, updatable = false)
     private GroupModel group;
 
     public StudentModel(String names, String middleName, String lastName){

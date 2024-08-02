@@ -1,9 +1,17 @@
 package com.valcos98.schoolproject.generalComponents;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+import com.valcos98.schoolproject.studentsComponents.StudentModel;
 
 public class CsvUtilities {
 
@@ -43,5 +51,24 @@ public class CsvUtilities {
         }
 
         return csvRows;
+    }
+
+    public static List<StudentModel> csvToStudentsList(MultipartFile file) throws CsvValidationException, IOException{
+        List<StudentModel> studentList = new ArrayList<>();
+        BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(),"UTF-8"));
+        CSVReader csvReader = new CSVReader(fileReader);
+        while (true) {
+            String[] names = csvReader.peek();
+            if (names != null) {
+                StudentModel newStudent = new StudentModel(names[0], names[1], names[2]);
+                studentList.add(newStudent);
+                csvReader.readNext();
+            }else{
+                break;
+            }
+        }
+        csvReader.close();
+        fileReader.close();
+        return studentList;
     }
 }

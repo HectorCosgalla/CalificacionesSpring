@@ -1,5 +1,6 @@
 package com.valcos98.schoolproject.groupsComponents;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +14,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.opencsv.exceptions.CsvValidationException;
 import com.valcos98.schoolproject.courseComponents.CourseModel;
 import com.valcos98.schoolproject.courseComponents.CourseRepository;
+import com.valcos98.schoolproject.generalComponents.CsvUtilities;
 import com.valcos98.schoolproject.generalComponents.PublicUtilities;
 import com.valcos98.schoolproject.semesterComponents.SemesterRepository;
+import com.valcos98.schoolproject.studentsComponents.StudentModel;
+import com.valcos98.schoolproject.studentsComponents.StudentsRepository;
 
 @RestController
 @RequestMapping("/grupos")
@@ -30,11 +36,18 @@ public class GroupRESTController {
     SemesterRepository semesterRepository;
     CourseRepository courseRepository;
     GroupRepository groupRepository;
+    StudentsRepository studentsRepository;
 
-    public GroupRESTController(SemesterRepository semesterRepository, CourseRepository courseRepository, GroupRepository groupRepository){
+    public GroupRESTController(
+            SemesterRepository semesterRepository,
+            CourseRepository courseRepository,
+            GroupRepository groupRepository,
+            StudentsRepository studentsRepository
+        ){
         this.semesterRepository = semesterRepository;
         this.courseRepository = courseRepository;
         this.groupRepository = groupRepository;
+        this.studentsRepository = studentsRepository;
     }
 
     @GetMapping("/{id}")
@@ -46,20 +59,23 @@ public class GroupRESTController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping(value = "",consumes = {"multipart/form-data"})
     private ResponseEntity<Void> createANewGroup(
+        @RequestPart("file") MultipartFile csvStudents,
         @RequestParam(value = "courseId", required = true) String coursesIds, 
-        @RequestBody GroupModel group,
+        @RequestPart("letter") String group,
         UriComponentsBuilder ucb
-    ){
+    ) throws CsvValidationException, IOException{
         String[] listOfCoursesIds = coursesIds.split(" ");
         List<CourseModel> listOfCourses = new ArrayList<>();
+        List<StudentModel> listOfStudents = studentsRepository.saveAll(CsvUtilities.csvToStudentsList(csvStudents));
         for (String courseId : listOfCoursesIds) {
             CourseModel course = PublicUtilities.getModelObjectById(Long.parseLong(courseId), courseRepository);
             listOfCourses.add(course);
         }
-        GroupModel newGroup = new GroupModel(group.getLetter());
+        GroupModel newGroup = new GroupModel(group);
         newGroup.setCourses(listOfCourses);
+        newGroup.setStudents(listOfStudents);
         GroupModel savedGroup = groupRepository.save(newGroup);
         URI locationOfNewGroup = ucb
             .path("/grupos/{id}")
